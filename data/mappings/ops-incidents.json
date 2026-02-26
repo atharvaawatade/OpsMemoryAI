@@ -1,0 +1,23 @@
+{
+  "mappings": {
+    "properties": {
+      "incident_id": { "type": "keyword" },
+      "title": { "type": "text" },
+      "description": { "type": "semantic_text" },
+      "service": { "type": "keyword" },
+      "severity": { "type": "keyword" },
+      "severity_num": { "type": "integer" },
+      "root_cause": { "type": "text" },
+      "resolution": { "type": "text" },
+      "resolution_summary": { "type": "semantic_text" },
+      "created_at": { "type": "date" },
+      "resolved_at": { "type": "date" },
+      "duration_minutes": { "type": "integer" },
+      "team": { "type": "keyword" },
+      "tags": { "type": "keyword" },
+      "related_decisions": { "type": "keyword" },
+      "postmortem_url": { "type": "keyword" },
+      "runbook_id": { "type": "keyword" }
+    }
+  }
+}

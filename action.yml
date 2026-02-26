@@ -1,0 +1,141 @@
+name: 'OpsMemory AI — Deployment Gate'
+description: >
+  Checks every PR against years of incident history and architectural decisions.
+  Blocks deployments that match the pattern of past production failures.
+  Powered by Elastic Agent Builder + ELSER semantic search + ES|QL analytics.
+
+author: 'atharvaawatade'
+
+branding:
+  icon: 'shield'
+  color: 'blue'
+
+inputs:
+  kibana_url:
+    description: 'Your Kibana Cloud URL (e.g. https://your-project.kb.us-central1.gcp.elastic.cloud)'
+    required: true
+  api_key:
+    description: 'Elastic API key with read/write access to ops-* indices'
+    required: true
+  elasticsearch_url:
+    description: 'Elasticsearch URL (e.g. https://your-project.es.us-central1.gcp.elastic.cloud:443)'
+    required: true
+  service:
+    description: 'Service name being deployed. Defaults to the repository name.'
+    required: false
+    default: '${{ github.event.repository.name }}'
+  agent_id:
+    description: 'Kibana Agent Builder agent ID'
+    required: false
+    default: 'opsmemory-enforcer'
+  auto_seed:
+    description: >
+      Auto-seed starter ADRs and incident patterns on first run.
+      Set to "false" if you have already seeded your own data.
+    required: false
+    default: 'true'
+  block_on_deny:
+    description: 'Fail the workflow (exit 1) when verdict is DENY. Set to "false" to run in audit-only mode.'
+    required: false
+    default: 'true'
+
+outputs:
+  verdict:
+    description: 'APPROVE, DENY, or NEEDS_REVIEW'
+    value: ${{ steps.gate.outputs.verdict }}
+  ticket_id:
+    description: 'Review ticket ID created in ops-actions (only on DENY/NEEDS_REVIEW)'
+    value: ${{ steps.gate.outputs.ticket_id }}
+  signals_count:
+    description: 'Number of dangerous code patterns detected in the diff'
+    value: ${{ steps.signals.outputs.signals_count }}
+
+runs:
+  using: 'composite'
+  steps:
+
+    # ── 1. Python runtime ─────────────────────────────────────────
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    # ── 2. Install dependencies ───────────────────────────────────
+    - name: Install OpsMemory dependencies
+      shell: bash
+      run: |
+        pip install --quiet requests colorama python-dotenv elasticsearch
+
+    # ── 3. Auto-seed Elastic on first run ────────────────────────
+    #    Creates ops-decisions (ADRs) + ops-incidents + ops-actions indices
+    #    with starter data if they don't already exist. Idempotent.
+    - name: Seed Elastic indices (first-run setup)
+      if: inputs.auto_seed == 'true'
+      shell: bash
+      env:
+        ELASTICSEARCH_URL: ${{ inputs.elasticsearch_url }}
+        ELASTIC_API_KEY: ${{ inputs.api_key }}
+      run: |
+        python3 ${{ github.action_path }}/scripts/seed_elastic.py
+
+    # ── 4. Extract code signals from git diff ────────────────────
+    #    Reads actual code changes to catch "minor fix" PRs hiding
+    #    dangerous config changes (retry_count=50, circuit breaker off...)
+    - name: Extract code signals from diff
+      id: signals
+      shell: bash
+      run: |
+        git fetch origin ${{ github.base_ref }} --depth=50 2>/dev/null || true
+
+        DIFF_FILE="/tmp/opsmemory_pr_diff.txt"
+        git diff origin/${{ github.base_ref }}...HEAD -- \
+          '*.py' '*.yaml' '*.yml' '*.json' '*.env' \
+          '*.toml' '*.cfg' '*.conf' '*.properties' '*.tf' \
+          2>/dev/null > "${DIFF_FILE}" || echo "" > "${DIFF_FILE}"
+
+        DIFF_SIZE=$(wc -c < "${DIFF_FILE}" 2>/dev/null || echo 0)
+        echo "diff_file=${DIFF_FILE}" >> $GITHUB_OUTPUT
+        echo "diff_size=${DIFF_SIZE}" >> $GITHUB_OUTPUT
+
+        # Count signals using the extractor
+        SIGNALS=$(OPSMEMORY_DIFF_FILE="${DIFF_FILE}" python3 \
+          ${{ github.action_path }}/gateway/extract_signals.py 2>/dev/null | \
+          grep -oP 'Total signals: \K[0-9]+' || echo "0")
+        echo "signals_count=${SIGNALS}" >> $GITHUB_OUTPUT
+        echo "OpsMemory: diff=${DIFF_SIZE}b, signals=${SIGNALS}"
+
+    # ── 5. Run the deployment gate ───────────────────────────────
+    - name: Run OpsMemory Deployment Gate
+      id: gate
+      shell: bash
+      env:
+        KIBANA_URL: ${{ inputs.kibana_url }}
+        ELASTIC_API_KEY: ${{ inputs.api_key }}
+        ELASTICSEARCH_URL: ${{ inputs.elasticsearch_url }}
+        AGENT_ID: ${{ inputs.agent_id }}
+        OPSMEMORY_DIFF_FILE: ${{ steps.signals.outputs.diff_file }}
+      run: |
+        SERVICE="${{ inputs.service }}"
+        SHA="${{ github.event.pull_request.head.sha || github.sha }}"
+        TITLE="${{ github.event.pull_request.title || github.event.head_commit.message || 'Deployment' }}"
+
+        # Run the gate — captures exit code
+        python3 ${{ github.action_path }}/gateway/ci_agent.py \
+          "${SERVICE}" \
+          "${SHA:0:7}" \
+          "${TITLE}" 2>&1 | tee /tmp/opsmemory_output.txt
+        GATE_EXIT=${PIPESTATUS[0]}
+
+        # Parse verdict and ticket from output for downstream steps
+        VERDICT=$(grep -oP '(?<=VERDICT: )\w+' /tmp/opsmemory_output.txt | head -1 || echo "UNKNOWN")
+        TICKET=$(grep -oP 'REVIEW-\d+' /tmp/opsmemory_output.txt | head -1 || echo "")
+
+        echo "verdict=${VERDICT}" >> $GITHUB_OUTPUT
+        echo "ticket_id=${TICKET}" >> $GITHUB_OUTPUT
+
+        # Honour block_on_deny setting
+        if [[ "${GATE_EXIT}" != "0" && "${{ inputs.block_on_deny }}" == "true" ]]; then
+          exit 1
+        fi
+      continue-on-error: true

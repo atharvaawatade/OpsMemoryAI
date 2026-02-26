@@ -1,0 +1,76 @@
+{
+    "agent_id": "opsmemory-enforcer",
+    "name": "OpsMemory Enforcer",
+    "description": "Protects production by blocking deployments that match historical failure patterns. Uses ELSER semantic search, ES|QL pattern analytics, and ADR policy enforcement to prevent organizational amnesia.",
+    "model": "anthropic-claude-4.5-opus",
+    "system_prompt": "See agent/system_prompt.md for the full prompt deployed in Kibana Agent Builder.",
+
+    "built_in_tools": [],
+
+    "tools": [
+        {
+            "id": "policy_search",
+            "type": "index_search",
+            "index": "ops-decisions",
+            "fields": ["content", "title"],
+            "description": "Searches the ops-decisions index which contains Architectural Decision Records (ADRs) and operational runbooks. Use this tool when a user PROPOSES A CHANGE — for example 'increase retry count', 'change timeout', 'migrate to Kafka', 'update config', 'deploy new version', or any modification to system behavior or configuration. This tool checks whether the proposed change violates an existing company policy or architectural decision. Returns: ADR title, ruling (ACCEPTED/REJECTED), rationale, and the specific rule text. When to call: FIRST — before incident_memory_search and cascading_pattern_detector, whenever the user is proposing or describing a change. Query with the change type plus the service name. Do NOT use platform.core.search for this."
+        },
+        {
+            "id": "incident_memory_search",
+            "type": "index_search",
+            "index": "ops-incidents",
+            "fields": ["description", "root_cause", "title", "resolution"],
+            "description": "Performs semantic search over the ops-incidents index to find historical production incidents that are similar to a current problem or proposed change. Uses ELSER embeddings so it understands meaning — 'slow checkout' matches 'latency spike' and 'retry storm' matches 'connection amplification'. Returns: incident_id, title, severity (SEV-1/SEV-2/SEV-3), root_cause, resolution, affected service, date, and related ADR references. When to call: SECOND in deployment checks (after policy_search). FIRST when user reports an active problem. Query with failure mode description plus service name. Do NOT use platform.core.search for this."
+        },
+        {
+            "id": "cascading_pattern_detector",
+            "type": "esql",
+            "query": "FROM ops-incidents | WHERE service == ?service_name | STATS incident_count = COUNT(*), root_causes = VALUES(root_cause), severities = VALUES(severity) BY severity | SORT incident_count DESC | LIMIT 10",
+            "parameters": {
+                "service_name": {
+                    "type": "string",
+                    "required": true,
+                    "description": "The exact service name to analyze (e.g. 'checkout-service', 'auth-service', 'payment-gateway')"
+                }
+            },
+            "description": "Executes an ES|QL analytical query against the ops-incidents index to detect RECURRING failure patterns for a specific service. Use this to QUANTIFY how often a service has experienced failures. Provides statistical evidence: incident count per severity level and aggregated root causes. Example: 'checkout-service: 8 total incidents — 1 SEV-1, 2 SEV-2, 5 SEV-3'. When to call: THIRD in deployment checks (always, even if other tools found nothing — confirms '0 incidents, safe'). Required parameter: service_name. Do NOT use platform.core.search for this."
+        }
+    ],
+
+    "reasoning_trace": true,
+    "max_steps": 10,
+
+    "api_endpoints": {
+        "converse": "/api/agent_builder/converse",
+        "mcp": "/api/agent_builder/mcp",
+        "a2a": "/api/agent_builder/a2a/opsmemory-enforcer.json"
+    },
+
+    "elasticsearch_indices": {
+        "ops-incidents": {
+            "purpose": "Historical incident records with ELSER semantic_text embeddings",
+            "document_count": "40+",
+            "key_fields": ["incident_id", "title", "description", "service", "severity", "root_cause", "resolution", "created_at", "tags", "related_decisions"]
+        },
+        "ops-decisions": {
+            "purpose": "Architectural Decision Records (ADRs) and operational runbooks",
+            "document_count": "25+",
+            "key_fields": ["adr_id", "title", "content", "status", "decision", "rationale"]
+        },
+        "ops-actions": {
+            "purpose": "Review tickets created on DENY verdicts",
+            "key_fields": ["ticket_id", "service", "verdict", "reason", "evidence_refs", "assigned_team", "status", "created_at"]
+        }
+    },
+
+    "labels": ["SRE", "OpsMemory", "CI-CD", "DevOps", "Elastic-Agent-Builder"],
+
+    "setup_instructions": {
+        "step_1": "Create ops-incidents index with semantic_text field mapping (see data/mappings/)",
+        "step_2": "Seed incidents and ADRs: node data/seed_data.js",
+        "step_3": "Create agent in Kibana Agent Builder with agent_id: opsmemory-enforcer",
+        "step_4": "Add 3 tools as defined above — REMOVE all built-in platform.core.* tools",
+        "step_5": "Paste system_prompt.md content into the agent's custom instructions",
+        "step_6": "Run: python3 gateway/ci_agent.py checkout-service 3.0.0 'Increased retry_count to 50'"
+    }
+}

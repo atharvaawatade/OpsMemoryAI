@@ -1,0 +1,42 @@
+{
+    "mappings": {
+        "properties": {
+            "decision_id": {
+                "type": "keyword"
+            },
+            "type": {
+                "type": "keyword"
+            },
+            "title": {
+                "type": "text"
+            },
+            "content": {
+                "type": "semantic_text"
+            },
+            "service": {
+                "type": "keyword"
+            },
+            "status": {
+                "type": "keyword"
+            },
+            "created_at": {
+                "type": "date"
+            },
+            "updated_at": {
+                "type": "date"
+            },
+            "author": {
+                "type": "keyword"
+            },
+            "tags": {
+                "type": "keyword"
+            },
+            "related_incidents": {
+                "type": "keyword"
+            },
+            "superseded_by": {
+                "type": "keyword"
+            }
+        }
+    }
+}

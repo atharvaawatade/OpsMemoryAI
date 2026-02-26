@@ -1,0 +1,9 @@
+
+requests
+python-dotenv
+colorama
+elasticsearch
+openai
+aiohttp
+fastmcp
+mcp[cli]

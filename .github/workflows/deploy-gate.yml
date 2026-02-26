@@ -1,0 +1,131 @@
+name: OpsMemory AI — Deployment Gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main, master, production, release]
+
+jobs:
+  opsmemory-gate:
+    name: Organizational Memory Check
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      statuses: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install OpsMemory dependencies
+        run: pip install requests colorama python-dotenv
+
+      - name: Build deployment description from PR
+        id: build_desc
+        run: |
+          TITLE="${{ github.event.pull_request.title }}"
+          BODY="${{ github.event.pull_request.body }}"
+          BRANCH="${{ github.head_ref }}"
+          FILES_CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD 2>/dev/null | head -20 | tr '\n' ', ' || echo "unknown")
+
+          # Compose a rich description for the agent
+          DESCRIPTION="${TITLE}. Branch: ${BRANCH}. Files changed: ${FILES_CHANGED}. Details: ${BODY}"
+
+          # Truncate to 500 chars to avoid token overflow
+          DESCRIPTION="${DESCRIPTION:0:500}"
+          echo "description=${DESCRIPTION}" >> $GITHUB_OUTPUT
+          echo "Branch: ${BRANCH}"
+          echo "Description: ${DESCRIPTION}"
+
+      - name: Extract code signals from git diff
+        id: code_signals
+        run: |
+          # Fetch base branch so git diff works in shallow clone
+          git fetch origin ${{ github.base_ref }} --depth=50 2>/dev/null || true
+
+          # Write the full diff to a temp file (avoids env var size limits)
+          DIFF_FILE="/tmp/pr_diff.txt"
+          git diff origin/${{ github.base_ref }}...HEAD -- \
+            '*.py' '*.yaml' '*.yml' '*.json' '*.env' '*.toml' '*.cfg' '*.conf' '*.properties' \
+            2>/dev/null > "${DIFF_FILE}" || echo "" > "${DIFF_FILE}"
+
+          DIFF_SIZE=$(wc -c < "${DIFF_FILE}" 2>/dev/null || echo 0)
+          echo "diff_file=${DIFF_FILE}" >> $GITHUB_OUTPUT
+          echo "diff_size=${DIFF_SIZE}" >> $GITHUB_OUTPUT
+          echo "Code diff size: ${DIFF_SIZE} bytes"
+
+          # Preview first 20 lines of diff for the Actions log
+          echo "--- Diff preview (first 20 lines) ---"
+          head -20 "${DIFF_FILE}" || echo "(empty diff)"
+
+      - name: Run OpsMemory Deployment Gate
+        id: opsmemory
+        env:
+          KIBANA_URL: ${{ secrets.KIBANA_URL }}
+          ELASTIC_API_KEY: ${{ secrets.ELASTIC_API_KEY }}
+          ELASTICSEARCH_URL: ${{ secrets.ELASTICSEARCH_URL }}
+          AGENT_ID: opsmemory-enforcer
+          OPSMEMORY_DIFF_FILE: ${{ steps.code_signals.outputs.diff_file }}
+        run: |
+          SERVICE_NAME="${{ github.event.repository.name }}"
+          SHA="${{ github.event.pull_request.head.sha }}"
+          DESCRIPTION="${{ steps.build_desc.outputs.description }}"
+
+          echo "Running OpsMemory gate for: ${SERVICE_NAME}"
+          echo "Change description: ${DESCRIPTION}"
+          echo "Diff file: ${OPSMEMORY_DIFF_FILE} ($(wc -c < ${OPSMEMORY_DIFF_FILE} 2>/dev/null || echo 0) bytes)"
+
+          python3 gateway/ci_agent.py "${SERVICE_NAME}" "${SHA:0:7}" "${DESCRIPTION}"
+        continue-on-error: true
+
+      - name: Post verdict comment to PR
+        uses: actions/github-script@v7
+        if: always()
+        with:
+          script: |
+            const outcome = '${{ steps.opsmemory.outcome }}';
+            const isBlocked = outcome === 'failure';
+
+            const verdict = isBlocked
+              ? '🚫 **BLOCKED** — Deployment matches a historical failure pattern'
+              : '✅ **APPROVED** — No policy violations or incident pattern matches found';
+
+            const color = isBlocked ? '🔴' : '🟢';
+
+            const body = [
+              `## ${color} OpsMemory AI — Deployment Gate`,
+              ``,
+              `**Verdict: ${verdict}**`,
+              ``,
+              `| Check | Result |`,
+              `|---|---|`,
+              `| Policy Check (ADRs) | ${isBlocked ? 'Violation found' : 'No violations'} |`,
+              `| Incident Memory | ${isBlocked ? 'Matching past failure detected' : 'No matching incidents'} |`,
+              `| Pattern Analysis | ${isBlocked ? 'Recurring pattern confirmed' : 'No recurring pattern'} |`,
+              ``,
+              `> Powered by **Elastic Agent Builder** + **ELSER Semantic Search** + **ES|QL Analytics**`,
+              `>`,
+              `> OpsMemory checks every deployment against ${isBlocked ? 'years of' : 'organizational'} incident history and architectural decisions.`,
+              isBlocked
+                ? `\n**To unblock:** Review the agent reasoning trace, address the flagged concern, and re-open this PR.`
+                : ``,
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body,
+            });
+
+      - name: Fail the check on DENY verdict
+        if: steps.opsmemory.outcome == 'failure'
+        run: |
+          echo "::error::OpsMemory blocked this deployment. A similar change caused a production incident."
+          echo "::error::Review the agent reasoning trace above for details."
+          exit 1

@@ -1,0 +1,812 @@
+{
+  "run_at": "2026-02-26T13:18:02.007743+00:00",
+  "overall_status": "PASS",
+  "elapsed_s": 10.781,
+  "environment": {
+    "python": "3.14.2",
+    "elasticsearch_url": "(not set)",
+    "kibana_url": "(not set)",
+    "agent_id": "opsmemory-enforcer",
+    "next_url": "http://localhost:3000"
+  },
+  "summary": {
+    "total": 93,
+    "passed": 68,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 25,
+    "executed": 68,
+    "pass_rate": "100.0%"
+  },
+  "suites": [
+    {
+      "suite_id": "unit",
+      "suite_name": "Unit Tests — extract_signals.py",
+      "status": "PASS",
+      "tests": [
+        {
+          "id": "testing.unit.test_extract_signals.TestCircuitBreakerSignal.test_active_circuit_breaker_no_signal",
+          "name": "test_active_circuit_breaker_no_signal",
+          "class": "TestCircuitBreakerSignal",
+          "status": "PASS",
+          "elapsed_s": 0.001,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestCircuitBreakerSignal.test_circuit_breaker_signal_is_high_severity",
+          "name": "test_circuit_breaker_signal_is_high_severity",
+          "class": "TestCircuitBreakerSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestCircuitBreakerSignal.test_detects_circuit_breaker_false",
+          "name": "test_detects_circuit_breaker_false",
+          "class": "TestCircuitBreakerSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestCircuitBreakerSignal.test_detects_commented_out_circuit_breaker",
+          "name": "test_detects_commented_out_circuit_breaker",
+          "class": "TestCircuitBreakerSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestConnectionPoolSignal.test_connection_pool_is_medium_severity",
+          "name": "test_connection_pool_is_medium_severity",
+          "class": "TestConnectionPoolSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestConnectionPoolSignal.test_detects_max_connections",
+          "name": "test_detects_max_connections",
+          "class": "TestConnectionPoolSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestConnectionPoolSignal.test_detects_pool_size",
+          "name": "test_detects_pool_size",
+          "class": "TestConnectionPoolSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestDestructiveDBSignal.test_destructive_db_is_high_severity",
+          "name": "test_destructive_db_is_high_severity",
+          "class": "TestDestructiveDBSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestDestructiveDBSignal.test_detects_delete_from",
+          "name": "test_detects_delete_from",
+          "class": "TestDestructiveDBSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestDestructiveDBSignal.test_detects_drop_all",
+          "name": "test_detects_drop_all",
+          "class": "TestDestructiveDBSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestDestructiveDBSignal.test_detects_drop_table",
+          "name": "test_detects_drop_table",
+          "class": "TestDestructiveDBSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestDestructiveDBSignal.test_detects_truncate",
+          "name": "test_detects_truncate",
+          "class": "TestDestructiveDBSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestEdgeCases.test_empty_diff_returns_empty",
+          "name": "test_empty_diff_returns_empty",
+          "class": "TestEdgeCases",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestEdgeCases.test_removed_lines_not_flagged",
+          "name": "test_removed_lines_not_flagged",
+          "class": "TestEdgeCases",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestEdgeCases.test_safe_diff_returns_empty",
+          "name": "test_safe_diff_returns_empty",
+          "class": "TestEdgeCases",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestEdgeCases.test_signal_evidence_truncated_to_120_chars",
+          "name": "test_signal_evidence_truncated_to_120_chars",
+          "class": "TestEdgeCases",
+          "status": "PASS",
+          "elapsed_s": 0.0001,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestEdgeCases.test_whitespace_diff_returns_empty",
+          "name": "test_whitespace_diff_returns_empty",
+          "class": "TestEdgeCases",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestFormatOutput.test_format_empty_signals_with_diff",
+          "name": "test_format_empty_signals_with_diff",
+          "class": "TestFormatOutput",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestFormatOutput.test_format_includes_ground_truth_warning",
+          "name": "test_format_includes_ground_truth_warning",
+          "class": "TestFormatOutput",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestFormatOutput.test_format_includes_severity",
+          "name": "test_format_includes_severity",
+          "class": "TestFormatOutput",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestFormatOutput.test_format_includes_summary_count",
+          "name": "test_format_includes_summary_count",
+          "class": "TestFormatOutput",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestFormatOutput.test_format_no_diff_available",
+          "name": "test_format_no_diff_available",
+          "class": "TestFormatOutput",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestHardcodedSecretSignal.test_detects_api_key_literal",
+          "name": "test_detects_api_key_literal",
+          "class": "TestHardcodedSecretSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestHardcodedSecretSignal.test_detects_password_literal",
+          "name": "test_detects_password_literal",
+          "class": "TestHardcodedSecretSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestHardcodedSecretSignal.test_detects_token_literal",
+          "name": "test_detects_token_literal",
+          "class": "TestHardcodedSecretSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestHardcodedSecretSignal.test_hardcoded_secret_is_high_severity",
+          "name": "test_hardcoded_secret_is_high_severity",
+          "class": "TestHardcodedSecretSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestHardcodedSecretSignal.test_short_value_no_signal",
+          "name": "test_short_value_no_signal",
+          "class": "TestHardcodedSecretSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestMultiSignalDiff.test_detects_all_four_signals",
+          "name": "test_detects_all_four_signals",
+          "class": "TestMultiSignalDiff",
+          "status": "PASS",
+          "elapsed_s": 0.0001,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestMultiSignalDiff.test_evidence_captured",
+          "name": "test_evidence_captured",
+          "class": "TestMultiSignalDiff",
+          "status": "PASS",
+          "elapsed_s": 0.0001,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestMultiSignalDiff.test_high_severity_sorted_first",
+          "name": "test_high_severity_sorted_first",
+          "class": "TestMultiSignalDiff",
+          "status": "PASS",
+          "elapsed_s": 0.0001,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestMultiSignalDiff.test_no_duplicate_signal_types",
+          "name": "test_no_duplicate_signal_types",
+          "class": "TestMultiSignalDiff",
+          "status": "PASS",
+          "elapsed_s": 0.0001,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestRetryConfigSignal.test_boundary_retry_3_no_signal",
+          "name": "test_boundary_retry_3_no_signal",
+          "class": "TestRetryConfigSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestRetryConfigSignal.test_boundary_retry_5_no_signal",
+          "name": "test_boundary_retry_5_no_signal",
+          "class": "TestRetryConfigSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestRetryConfigSignal.test_boundary_retry_6_triggers_signal",
+          "name": "test_boundary_retry_6_triggers_signal",
+          "class": "TestRetryConfigSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestRetryConfigSignal.test_detects_max_retries_10",
+          "name": "test_detects_max_retries_10",
+          "class": "TestRetryConfigSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestRetryConfigSignal.test_detects_retries_key",
+          "name": "test_detects_retries_key",
+          "class": "TestRetryConfigSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestRetryConfigSignal.test_detects_retry_count_50",
+          "name": "test_detects_retry_count_50",
+          "class": "TestRetryConfigSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestRetryConfigSignal.test_retry_signal_is_high_severity",
+          "name": "test_retry_signal_is_high_severity",
+          "class": "TestRetryConfigSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestRetryConfigSignal.test_yaml_format_retry",
+          "name": "test_yaml_format_retry",
+          "class": "TestRetryConfigSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestTLSSignal.test_detects_ssl_verify_false",
+          "name": "test_detects_ssl_verify_false",
+          "class": "TestTLSSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestTLSSignal.test_detects_verify_false",
+          "name": "test_detects_verify_false",
+          "class": "TestTLSSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestTLSSignal.test_tls_signal_is_high_severity",
+          "name": "test_tls_signal_is_high_severity",
+          "class": "TestTLSSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestTimeoutSignal.test_detects_connect_timeout",
+          "name": "test_detects_connect_timeout",
+          "class": "TestTimeoutSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestTimeoutSignal.test_detects_read_timeout",
+          "name": "test_detects_read_timeout",
+          "class": "TestTimeoutSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.unit.test_extract_signals.TestTimeoutSignal.test_timeout_signal_is_medium_severity",
+          "name": "test_timeout_signal_is_medium_severity",
+          "class": "TestTimeoutSignal",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        }
+      ],
+      "summary": {
+        "total": 45,
+        "passed": 45,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "elapsed_s": 0.002
+    },
+    {
+      "suite_id": "integration",
+      "suite_name": "Integration Tests — Elasticsearch + APIs",
+      "status": "PASS",
+      "tests": [
+        {
+          "id": "testing.integration.test_elasticsearch.TestDataIntegrity.test_decision_document_schema",
+          "name": "test_decision_document_schema",
+          "class": "TestDataIntegrity",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Elasticsearch not configured"
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestDataIntegrity.test_incident_document_schema",
+          "name": "test_incident_document_schema",
+          "class": "TestDataIntegrity",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Elasticsearch not configured"
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestDataIntegrity.test_incident_severity_values",
+          "name": "test_incident_severity_values",
+          "class": "TestDataIntegrity",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Elasticsearch not configured"
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestDataIntegrity.test_ops_decisions_has_documents",
+          "name": "test_ops_decisions_has_documents",
+          "class": "TestDataIntegrity",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Elasticsearch not configured"
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestDataIntegrity.test_ops_incidents_has_documents",
+          "name": "test_ops_incidents_has_documents",
+          "class": "TestDataIntegrity",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Elasticsearch not configured"
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestElasticsearchConnectivity.test_auth_works",
+          "name": "test_auth_works",
+          "class": "TestElasticsearchConnectivity",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Elasticsearch not configured — set ELASTICSEARCH_URL + ELASTIC_API_KEY"
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestElasticsearchConnectivity.test_cluster_health_reachable",
+          "name": "test_cluster_health_reachable",
+          "class": "TestElasticsearchConnectivity",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Elasticsearch not configured — set ELASTICSEARCH_URL + ELASTIC_API_KEY"
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestElserSemanticSearch.test_aggregation_by_service",
+          "name": "test_aggregation_by_service",
+          "class": "TestElserSemanticSearch",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Elasticsearch not configured"
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestElserSemanticSearch.test_knn_or_semantic_text_field_exists",
+          "name": "test_knn_or_semantic_text_field_exists",
+          "class": "TestElserSemanticSearch",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Elasticsearch not configured"
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestElserSemanticSearch.test_semantic_search_returns_results",
+          "name": "test_semantic_search_returns_results",
+          "class": "TestElserSemanticSearch",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Elasticsearch not configured"
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestIndexExistence.test_all_required_indices_exist",
+          "name": "test_all_required_indices_exist",
+          "class": "TestIndexExistence",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Elasticsearch not configured"
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestIndexExistence.test_ops_actions_index_exists",
+          "name": "test_ops_actions_index_exists",
+          "class": "TestIndexExistence",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Elasticsearch not configured"
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestIndexExistence.test_ops_decisions_index_exists",
+          "name": "test_ops_decisions_index_exists",
+          "class": "TestIndexExistence",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Elasticsearch not configured"
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestIndexExistence.test_ops_incidents_index_exists",
+          "name": "test_ops_incidents_index_exists",
+          "class": "TestIndexExistence",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Elasticsearch not configured"
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestKibanaConnectivity.test_a2a_agent_card_reachable",
+          "name": "test_a2a_agent_card_reachable",
+          "class": "TestKibanaConnectivity",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Kibana not configured — set KIBANA_URL + ELASTIC_API_KEY"
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestKibanaConnectivity.test_kibana_status_reachable",
+          "name": "test_kibana_status_reachable",
+          "class": "TestKibanaConnectivity",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Kibana not configured — set KIBANA_URL + ELASTIC_API_KEY"
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestMCPEndpoint.test_mcp_initialize_call",
+          "name": "test_mcp_initialize_call",
+          "class": "TestMCPEndpoint",
+          "status": "SKIP",
+          "elapsed_s": 0.7079,
+          "message": "MCP endpoint unreachable"
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestMCPEndpoint.test_mcp_route_exists",
+          "name": "test_mcp_route_exists",
+          "class": "TestMCPEndpoint",
+          "status": "SKIP",
+          "elapsed_s": 0.6849,
+          "message": "/api/mcp not implemented as Next.js route (Python MCP server used instead)"
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestNextJSAPIRoutes.test_a2a_card_has_skills",
+          "name": "test_a2a_card_has_skills",
+          "class": "TestNextJSAPIRoutes",
+          "status": "PASS",
+          "elapsed_s": 1.8726,
+          "message": ""
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestNextJSAPIRoutes.test_a2a_route_returns_agent_card",
+          "name": "test_a2a_route_returns_agent_card",
+          "class": "TestNextJSAPIRoutes",
+          "status": "PASS",
+          "elapsed_s": 1.0223,
+          "message": ""
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestNextJSAPIRoutes.test_metrics_has_numeric_fields",
+          "name": "test_metrics_has_numeric_fields",
+          "class": "TestNextJSAPIRoutes",
+          "status": "PASS",
+          "elapsed_s": 1.2302,
+          "message": ""
+        },
+        {
+          "id": "testing.integration.test_elasticsearch.TestNextJSAPIRoutes.test_metrics_route_returns_200",
+          "name": "test_metrics_route_returns_200",
+          "class": "TestNextJSAPIRoutes",
+          "status": "PASS",
+          "elapsed_s": 1.3249,
+          "message": ""
+        }
+      ],
+      "summary": {
+        "total": 22,
+        "passed": 4,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 18
+      },
+      "elapsed_s": 6.843
+    },
+    {
+      "suite_id": "flow",
+      "suite_name": "Flow Tests — End-to-End Deployment Gate",
+      "status": "PASS",
+      "tests": [
+        {
+          "id": "testing.flow.test_full_flow.TestAgentBuilderDirectFlow.test_agent_builder_reachable",
+          "name": "test_agent_builder_reachable",
+          "class": "TestAgentBuilderDirectFlow",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Kibana not configured — set KIBANA_URL + ELASTIC_API_KEY"
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestAgentBuilderDirectFlow.test_dangerous_deployment_gets_deny_or_review",
+          "name": "test_dangerous_deployment_gets_deny_or_review",
+          "class": "TestAgentBuilderDirectFlow",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Kibana not configured — set KIBANA_URL + ELASTIC_API_KEY"
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestAgentBuilderDirectFlow.test_hardcoded_secret_triggers_deny",
+          "name": "test_hardcoded_secret_triggers_deny",
+          "class": "TestAgentBuilderDirectFlow",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Kibana not configured — set KIBANA_URL + ELASTIC_API_KEY"
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestAgentBuilderDirectFlow.test_safe_deployment_does_not_get_deny",
+          "name": "test_safe_deployment_does_not_get_deny",
+          "class": "TestAgentBuilderDirectFlow",
+          "status": "SKIP",
+          "elapsed_s": 0.0,
+          "message": "Kibana not configured — set KIBANA_URL + ELASTIC_API_KEY"
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestAgentMessageConstruction.test_dangerous_signals_produce_high_severity_message",
+          "name": "test_dangerous_signals_produce_high_severity_message",
+          "class": "TestAgentMessageConstruction",
+          "status": "PASS",
+          "elapsed_s": 0.0003,
+          "message": ""
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestAgentMessageConstruction.test_full_deployment_message_assembly",
+          "name": "test_full_deployment_message_assembly",
+          "class": "TestAgentMessageConstruction",
+          "status": "PASS",
+          "elapsed_s": 0.0001,
+          "message": ""
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestAgentMessageConstruction.test_message_contains_ground_truth_instruction",
+          "name": "test_message_contains_ground_truth_instruction",
+          "class": "TestAgentMessageConstruction",
+          "status": "PASS",
+          "elapsed_s": 0.0001,
+          "message": ""
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestAgentMessageConstruction.test_message_contains_signal_count",
+          "name": "test_message_contains_signal_count",
+          "class": "TestAgentMessageConstruction",
+          "status": "PASS",
+          "elapsed_s": 0.0001,
+          "message": ""
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestAgentMessageConstruction.test_no_diff_message_indicates_unavailable",
+          "name": "test_no_diff_message_indicates_unavailable",
+          "class": "TestAgentMessageConstruction",
+          "status": "PASS",
+          "elapsed_s": 0.0,
+          "message": ""
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestAgentMessageConstruction.test_safe_diff_message_indicates_no_danger",
+          "name": "test_safe_diff_message_indicates_no_danger",
+          "class": "TestAgentMessageConstruction",
+          "status": "PASS",
+          "elapsed_s": 0.0001,
+          "message": ""
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestNextJsDemoAPIFlow.test_demo_returns_reasoning",
+          "name": "test_demo_returns_reasoning",
+          "class": "TestNextJsDemoAPIFlow",
+          "status": "SKIP",
+          "elapsed_s": 1.0,
+          "message": "Agent Builder not available"
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestNextJsDemoAPIFlow.test_demo_returns_tools_used",
+          "name": "test_demo_returns_tools_used",
+          "class": "TestNextJsDemoAPIFlow",
+          "status": "SKIP",
+          "elapsed_s": 0.976,
+          "message": "Agent Builder not available"
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestNextJsDemoAPIFlow.test_demo_returns_verdict_field",
+          "name": "test_demo_returns_verdict_field",
+          "class": "TestNextJsDemoAPIFlow",
+          "status": "SKIP",
+          "elapsed_s": 0.9134,
+          "message": "Agent Builder not configured on server (status 502)"
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestNextJsDemoAPIFlow.test_demo_route_exists",
+          "name": "test_demo_route_exists",
+          "class": "TestNextJsDemoAPIFlow",
+          "status": "PASS",
+          "elapsed_s": 1.0094,
+          "message": ""
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestRegressionScenarios.test_combined_cascade_risk_scenario",
+          "name": "test_combined_cascade_risk_scenario",
+          "class": "TestRegressionScenarios",
+          "status": "PASS",
+          "elapsed_s": 0.0003,
+          "message": ""
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestRegressionScenarios.test_inc_0027_retry_storm_detected",
+          "name": "test_inc_0027_retry_storm_detected",
+          "class": "TestRegressionScenarios",
+          "status": "PASS",
+          "elapsed_s": 0.0001,
+          "message": ""
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestRegressionScenarios.test_inc_0038_redis_pool_exhaustion_detected",
+          "name": "test_inc_0038_redis_pool_exhaustion_detected",
+          "class": "TestRegressionScenarios",
+          "status": "PASS",
+          "elapsed_s": 0.0001,
+          "message": ""
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestSignalExtractionFlow.test_dangerous_diff_extracts_four_signals",
+          "name": "test_dangerous_diff_extracts_four_signals",
+          "class": "TestSignalExtractionFlow",
+          "status": "PASS",
+          "elapsed_s": 0.0002,
+          "message": ""
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestSignalExtractionFlow.test_evidence_max_120_chars",
+          "name": "test_evidence_max_120_chars",
+          "class": "TestSignalExtractionFlow",
+          "status": "PASS",
+          "elapsed_s": 0.0002,
+          "message": ""
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestSignalExtractionFlow.test_evidence_preserved_for_all_signals",
+          "name": "test_evidence_preserved_for_all_signals",
+          "class": "TestSignalExtractionFlow",
+          "status": "PASS",
+          "elapsed_s": 0.0002,
+          "message": ""
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestSignalExtractionFlow.test_high_severity_signals_sorted_first",
+          "name": "test_high_severity_signals_sorted_first",
+          "class": "TestSignalExtractionFlow",
+          "status": "PASS",
+          "elapsed_s": 0.0002,
+          "message": ""
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestSignalExtractionFlow.test_retry_storm_diff_extracts_signal",
+          "name": "test_retry_storm_diff_extracts_signal",
+          "class": "TestSignalExtractionFlow",
+          "status": "PASS",
+          "elapsed_s": 0.0001,
+          "message": ""
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestSignalExtractionFlow.test_safe_diff_extracts_zero_signals",
+          "name": "test_safe_diff_extracts_zero_signals",
+          "class": "TestSignalExtractionFlow",
+          "status": "PASS",
+          "elapsed_s": 0.0001,
+          "message": ""
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestSignalExtractionFlow.test_secret_leak_diff_extracts_hardcoded_secret",
+          "name": "test_secret_leak_diff_extracts_hardcoded_secret",
+          "class": "TestSignalExtractionFlow",
+          "status": "PASS",
+          "elapsed_s": 0.0001,
+          "message": ""
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestSignalExtractionFlow.test_signals_deduplicated",
+          "name": "test_signals_deduplicated",
+          "class": "TestSignalExtractionFlow",
+          "status": "PASS",
+          "elapsed_s": 0.0001,
+          "message": ""
+        },
+        {
+          "id": "testing.flow.test_full_flow.TestSignalExtractionFlow.test_tls_disabled_diff_extracts_tls_signal",
+          "name": "test_tls_disabled_diff_extracts_tls_signal",
+          "class": "TestSignalExtractionFlow",
+          "status": "PASS",
+          "elapsed_s": 0.0001,
+          "message": ""
+        }
+      ],
+      "summary": {
+        "total": 26,
+        "passed": 19,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 7
+      },
+      "elapsed_s": 3.902
+    }
+  ]
+}

@@ -1,41 +1,45 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# ── Credentials & secrets ──────────────────────────────────────────
+.env
+.env.local
+.env.production
+mcp_config.json
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# ── Python ─────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.venv/
+env/
+*.egg-info/
 
-# testing
-/coverage
+# ── Node ───────────────────────────────────────────────────────────
+node_modules/
+.next/
+out/
+tsconfig.tsbuildinfo
 
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
+# ── OS ─────────────────────────────────────────────────────────────
 .DS_Store
-*.pem
+Thumbs.db
+*.swp
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
+# ── IDE ────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.iml
 
-# env files (can opt-in for committing if needed)
-.env*
+# ── Cache & build ──────────────────────────────────────────────────
+.agent_cache.json
+*.zip
 
-# vercel
-.vercel
+# ── Internal docs (not for public repo) ───────────────────────────
+finalterms.md
+teamatesaid.md
+NEXT_STEPS.md
+status.html
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# ── Test log timestamps (keep latest.* only) ───────────────────────
+testing/logs/2*.json
+testing/logs/2*.txt

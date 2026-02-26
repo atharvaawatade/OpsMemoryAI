@@ -1,0 +1,39 @@
+
+name: OpsMemory Gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  ops-memory-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: pip install requests colorama python-dotenv
+
+    - name: Run OpsMemory Enforcer
+      env:
+        KIBANA_URL: ${{ secrets.KIBANA_URL }}
+        ELASTICSEARCH_URL: ${{ secrets.ELASTICSEARCH_URL }}
+        ELASTIC_API_KEY: ${{ secrets.ELASTIC_API_KEY }}
+        AGENT_ID: opsmemory-enforcer
+      run: |
+        PR_TITLE="${{ github.event.pull_request.title }}"
+        PR_BODY="${{ github.event.pull_request.body }}"
+        SERVICE=$(echo "$PR_TITLE" | grep -oP '(?<=\[)[^\]]+' || echo "unknown-service")
+
+        echo "🤖 OpsMemory Enforcer — Analyzing deployment..."
+        echo "   PR: $PR_TITLE"
+        echo "   Service: $SERVICE"
+
+        python gateway/ci_agent.py "$SERVICE" "PR-${{ github.event.pull_request.number }}" "$PR_TITLE $PR_BODY"
